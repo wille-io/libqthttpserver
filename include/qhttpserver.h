@@ -66,6 +66,9 @@ public:
     template<typename Rule = QHttpServerRouterRule, typename ... Args>
     bool route(Args && ... args)
     {
+#if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
+      return false;
+#else
         using ViewHandler = typename VariadicTypeLast<Args...>::Type;
         using ViewTraits = QHttpServerRouterViewTraits<ViewHandler>;
         static_assert(ViewTraits::Arguments::compileCheck(),
@@ -73,6 +76,7 @@ public:
         return routeHelper<Rule, ViewHandler, ViewTraits>(
                 QtPrivate::makeIndexSequence<sizeof ... (Args) - 1>{},
                 std::forward<Args>(args)...);
+#endif
     }
 
 private:
