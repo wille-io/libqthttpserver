@@ -55,7 +55,11 @@ class Q_HTTPSERVER_EXPORT QHttpServerRequest
 public:
     virtual ~QHttpServerRequest();
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
+    enum Method
+#else
     enum class Method
+#endif
     {
         Unknown = 0x0000,
         Get     = 0x0001,

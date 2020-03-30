@@ -93,7 +93,11 @@ void QAbstractHttpServer::handleReadyRead(QTcpSocket *socket,
         const auto it = headers.find(upgradeHash);
         if (it != headers.end()) {
 #if defined(QT_WEBSOCKETS_LIB)
+#if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
+            if (QString::fromUtf8(it.value().second).compare(QByteArrayLiteral("websocket"), Qt::CaseInsensitive) == 0) {
+#else
             if (it.value().second.compare(QByteArrayLiteral("websocket"), Qt::CaseInsensitive) == 0) {
+#endif
                 static const auto signal = QMetaMethod::fromSignal(
                             &QAbstractHttpServer::newWebSocketConnection);
                 if (isSignalConnected(signal)) {

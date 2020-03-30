@@ -198,7 +198,11 @@ int QHttpServerRequestPrivate::onHeaderValue(http_parser *httpParser, const char
     Q_ASSERT(!i->lastHeader.isEmpty());
     const auto value = QByteArray(at, int(length));
     i->headers[i->headerHash(i->lastHeader)] = qMakePair(i->lastHeader, value);
+#if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
+    if (QString::fromUtf8(i->lastHeader).compare(QByteArrayLiteral("host"), Qt::CaseInsensitive) == 0)
+#else
     if (i->lastHeader.compare(QByteArrayLiteral("host"), Qt::CaseInsensitive) == 0)
+#endif
         parseUrl(at, length, true, &i->url);
 #if defined(QT_DEBUG)
     i->lastHeader.clear();
