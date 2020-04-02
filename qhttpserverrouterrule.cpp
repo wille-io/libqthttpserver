@@ -247,8 +247,8 @@ bool QHttpServerRouterRule::createPathRegexp(const std::initializer_list<int> &m
         }
 
 #if QT_VERSION < QT_VERSION_CHECK(5, 12, 0)
-//	if (QString(*it).isEmpty())
-//	    continue;
+	if (QString(*it).isEmpty())
+	    continue;
 #else
         if (it->isEmpty())
             continue;
